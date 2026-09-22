@@ -3,7 +3,8 @@ const path = require("path");
 const fs = require("fs");
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = 8080;
+const HOST = "0.0.0.0";
 const DATA_FILE = process.env.DATA_FILE || path.join(__dirname, "local-data.json");
 
 function readData(){
@@ -38,4 +39,4 @@ app.put("/api/data", (req, res) => {
   }
 });
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}, data file: ${DATA_FILE}`));
+app.listen(PORT, HOST, () => console.log(`Server running on ${HOST}:${PORT}, data file: ${DATA_FILE}`));
