@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中秋烤肉活動籌備表</title>
+<style>
+  :root{
+    --bg: #fdf6ec;
+    --panel: #ffffff;
+    --accent: #e0772b;
+    --accent-dark: #b85a1a;
+    --line: #e6d9c6;
+    --text: #3a2f22;
+    --muted: #8a7a63;
+    --header-bg: #f3e3c8;
+  }
+  *{ box-sizing: border-box; }
+  body{
+    margin:0;
+    font-family: "Microsoft JhengHei", "PingFang TC", "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px;
+  }
+  .wrap{ max-width: 1100px; margin: 0 auto; }
+
+  .title-row{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom: 4px;
+  }
+  .moon{ font-size: 40px; }
+  h1{
+    font-size: 28px;
+    margin: 0 0 0 -8px;
+    flex: 1;
+    outline:none;
+    padding: 3px 8px;
+    border-radius: 8px;
+    transition: background-color .15s ease, box-shadow .15s ease;
+  }
+  h1:hover{ background: #fff1dc; }
+  h1:focus{ background: #fff8ef; box-shadow: 0 0 0 2px var(--accent); }
+
+  .subline{
+    display:flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin: 8px 0 24px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .subline > div{
+    display:flex;
+    align-items:center;
+    gap: 2px;
+  }
+  .subline span.label{ color: var(--text); font-weight:600; margin-right:4px; }
+  .subline .value{
+    outline:none;
+    min-width: 40px;
+    display:inline-block;
+    color: #2a1f14;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 8px;
+    transition: background-color .15s ease, box-shadow .15s ease;
+  }
+  .subline .value:hover{
+    background: #fff1dc;
+  }
+  .subline .value:focus{
+    background: #fff8ef;
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+  .subline .value:empty::before{
+    content: attr(data-placeholder);
+    color: #b9ab92;
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .panel{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 22px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  }
+  .panel-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom: 12px;
+  }
+  .panel-head h2{
+    font-size: 17px;
+    margin:0;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .total-people{
+    display:inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 800;
+    font-size: 16px;
+    padding: 6px 18px;
+    border-radius: 999px;
+    box-shadow: 0 2px 6px rgba(224,119,43,0.35);
+  }
+
+  .filter-bar{
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .filter-people{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  .filter-person-btn{
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    background: #fff;
+    transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .filter-person-btn:hover{ opacity: 0.85; }
+  .filter-person-btn.all-btn.active{
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .cell-select{
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 4px 6px;
+    font-size: 13px;
+    background: #fff;
+    color: var(--text);
+  }
+
+  table{
+    width:100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    table-layout: fixed;
+  }
+  th, td{
+    border: 1px solid var(--line);
+    padding: 0;
+    text-align: left;
+    vertical-align: middle;
+    overflow-wrap: anywhere;
+  }
+  th{
+    background: var(--header-bg);
+    color: var(--accent-dark);
+    font-weight: 600;
+    padding: 8px 10px;
+  }
+  td{
+    padding: 4px;
+  }
+  td.num{ text-align:center; }
+
+  .cell-wrap{
+    display:flex;
+    align-items:center;
+    height: 100%;
+    min-height: 32px;
+  }
+  .cell-editable{
+    outline: none;
+    width: 100%;
+    padding: 6px 8px;
+    border-radius: 6px;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    transition: background-color .15s ease, box-shadow .15s ease;
+  }
+  .cell-editable:hover{ background: #fff7ec; }
+  .cell-editable:focus{
+    background: #fff1dc;
+    box-shadow: inset 0 0 0 2px var(--accent);
+  }
+  .cell-input{
+    border: none;
+    background: transparent;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    font: inherit;
+    color: inherit;
+    text-align: inherit;
+    padding: 6px 8px;
+    outline: none;
+    border-radius: 6px;
+    transition: background-color .15s ease, box-shadow .15s ease;
+  }
+  .cell-input:hover{ background: #fff7ec; }
+  .cell-input:focus{
+    background: #fff1dc;
+    box-shadow: inset 0 0 0 2px var(--accent);
+  }
+  tr.total-row td{
+    background: #faf1e2;
+    font-weight: 700;
+    padding: 8px 10px;
+  }
+  .del-btn{
+    background: none;
+    border: none;
+    color: #c0392b;
+    cursor: pointer;
+    font-size: 16px;
+    line-height:1;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .del-btn:hover{ background: #fbe3e0; }
+  td.op{ width: 34px; text-align:center; padding: 4px; }
+
+  .cell-select.done{ border-left: 4px solid #1e7a34; color:#1e7a34; font-weight:600; }
+  .cell-select.pending{ border-left: 4px solid #c0392b; color:#c0392b; font-weight:600; }
+  .cell-select.cat-food{ border-left: 4px solid #c26a1d; color:#c26a1d; font-weight:600; }
+  .cell-select.cat-drink{ border-left: 4px solid #1f7a9c; color:#1f7a9c; font-weight:600; }
+  .cell-select.cat-other{ border-left: 4px solid #6b5b95; color:#6b5b95; font-weight:600; }
+  .cell-select option{
+    color: var(--text);
+    background: #fff;
+    font-weight: 400;
+  }
+
+  .tag-cell{ position: relative; }
+  .tag-wrap{
+    display:grid;
+    grid-template-columns: repeat(2, minmax(60px, max-content));
+    gap:6px 8px;
+    align-items:center;
+    height: 100%;
+    min-height: 32px;
+    padding: 4px;
+  }
+  .tag-chip{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    font-size:12px;
+    font-weight:700;
+    padding: 3px 7px 3px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .tag-chip-x{
+    cursor:pointer;
+    font-size:13px;
+    opacity:0.55;
+  }
+  .tag-chip-x:hover{ opacity:1; }
+  .tag-add-btn{
+    cursor:pointer;
+    border:1.5px dashed var(--line);
+    color: var(--muted);
+    background: #fff;
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size:15px;
+    font-weight:700;
+    line-height:1;
+  }
+  .tag-add-btn:hover{ border-color: var(--accent); color: var(--accent-dark); background: #fff7ec; }
+  .tag-dropdown{
+    position:absolute;
+    top: 100%;
+    left:0;
+    z-index: 20;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:8px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+    padding:6px;
+    min-width:120px;
+  }
+  .tag-option{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:6px 8px;
+    font-size:13px;
+    cursor:pointer;
+    border-radius:4px;
+    white-space:nowrap;
+  }
+  .tag-option:hover{ background: #fff1dc; }
+  .tag-dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    flex-shrink:0;
+  }
+
+  .add-row-btn{
+    margin-top: 10px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .add-row-btn:hover{ background: var(--accent-dark); }
+
+  .toolbar{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    justify-content:flex-end;
+    margin-bottom: 12px;
+  }
+  .sync-status{
+    font-size: 12px;
+    color: var(--muted);
+    margin-right: auto;
+  }
+  .tool-btn{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    color: var(--text);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .tool-btn:hover{ border-color: var(--accent); color: var(--accent-dark); }
+  .tool-btn.primary{ background: var(--accent); color:#fff; border-color: var(--accent); }
+  .tool-btn.primary:hover{ background: var(--accent-dark); }
+
+  footer{
+    text-align:center;
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 20px;
+  }
+
+  .table-scroll{
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .modal-overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(58,47,34,0.4);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index: 100;
+    padding: 16px;
+  }
+  .modal-box{
+    background:#fff;
+    border-radius: 14px;
+    padding: 22px 24px;
+    max-width: 320px;
+    width: 100%;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.28);
+    text-align:center;
+  }
+  .modal-msg{
+    font-size: 15px;
+    color: var(--text);
+    margin-bottom: 20px;
+    line-height:1.5;
+  }
+  .modal-btn-row{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+  }
+  .modal-btn{
+    flex:1;
+    padding: 9px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor:pointer;
+    border:1px solid var(--line);
+    background:#fff;
+    color: var(--text);
+  }
+  .modal-btn.cancel:hover{ border-color: var(--accent); color: var(--accent-dark); }
+  .modal-btn.confirm{
+    background:#c0392b;
+    border-color:#c0392b;
+    color:#fff;
+    font-weight:700;
+  }
+  .modal-btn.confirm:hover{ background:#a5301f; }
+
+  @media (max-width: 720px){
+    body{ padding: 14px; }
+    .title-row{ gap: 10px; }
+    .moon{ font-size: 30px; }
+    h1{ font-size: 21px; }
+    .subline{ flex-direction: column; align-items: flex-start; gap: 8px; }
+    .toolbar{ flex-wrap: wrap; }
+    .sync-status{ width: 100%; margin-right: 0; }
+    .tool-btn{ flex: 1 1 auto; text-align:center; }
+    .panel{ padding: 14px 12px; }
+    .panel-head h2{ font-size: 15px; }
+    table{ font-size: 13px; }
+    th, td{ padding: 6px 8px; }
+    .tag-cell{ min-width: 120px; }
+  }
+
+  @media print{
+    body{ background: #fff; padding: 0; }
+    .toolbar{ display:none; }
+    .panel{ box-shadow:none; break-inside: avoid; }
+    .add-row-btn, .del-btn, td.op, .tag-add-btn{ display:none; }
+    .filter-bar{ display:none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="toolbar">
+    <span class="sync-status" id="syncStatus">連線中…</span>
+    <button class="tool-btn" id="resetBtn">↺ 清空重填</button>
+    <button class="tool-btn primary" id="printBtn">🖨 列印</button>
+  </div>
+
+  <div class="title-row">
+    <div class="moon">🌕🍖🥮</div>
+    <h1 contenteditable="true">中秋烤肉活動籌備表</h1>
+  </div>
+  <div class="subline">
+    <div><span class="label">📅 日期</span><span class="value" contenteditable="true" data-placeholder="點我填寫日期">2026/9/25（五）</span></div>
+    <div><span class="label">📍 地點</span><span class="value" contenteditable="true" data-placeholder="點我填寫地點"></span></div>
+    <div><span class="label">👤 總召</span><span class="value" contenteditable="true" data-placeholder="點我填寫"></span></div>
+  </div>
+
+  <!-- 參與人數 -->
+  <div class="panel">
+    <div class="panel-head">
+      <h2>👨‍👩‍👧‍👦 參與人數 &amp; 抵達時間</h2>
+    </div>
+    <div class="table-scroll">
+    <table id="familyTable">
+      <thead>
+        <tr>
+          <th style="width:20%">家庭 / 家族</th>
+          <th class="num" style="width:9%">大人</th>
+          <th class="num" style="width:9%">小孩</th>
+          <th class="num" style="width:9%">寵物</th>
+          <th style="width:14%">抵達時間</th>
+          <th>備註</th>
+          <th class="op" style="width:34px"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- rows injected by JS -->
+      </tbody>
+      <tfoot>
+        <tr class="total-row">
+          <td>總計</td>
+          <td class="num" id="sumAdult">0</td>
+          <td class="num" id="sumKid">0</td>
+          <td class="num" id="sumPet">0</td>
+          <td colspan="3" style="text-align:right;"><span class="total-people" id="totalPeopleCell">共 0 人</span></td>
+        </tr>
+      </tfoot>
+    </table>
+    </div>
+    <button class="add-row-btn" data-add="family">＋ 新增一戶</button>
+  </div>
+
+  <!-- 採買 -->
+  <div class="panel">
+    <div class="panel-head">
+      <h2>🛒 採買</h2>
+    </div>
+    <div class="filter-bar">
+      <span>篩選負責人：</span>
+      <div class="filter-people" id="personFilterButtons"></div>
+    </div>
+    <div class="table-scroll">
+    <table id="shopTable">
+      <thead>
+        <tr>
+          <th style="width:10%">分類</th>
+          <th style="width:22%">項目</th>
+          <th style="width:8%">數量</th>
+          <th style="width:16%">負責人</th>
+          <th style="width:12%">狀態</th>
+          <th>備註</th>
+          <th class="op" style="width:34px"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- rows injected by JS -->
+      </tbody>
+    </table>
+    </div>
+    <button class="add-row-btn" data-add="shop">＋ 新增品項</button>
+  </div>
+
+  <!-- 行程 -->
+  <div class="panel">
+    <div class="panel-head">
+      <h2>🕒 活動行程</h2>
+    </div>
+    <div class="table-scroll">
+    <table id="scheduleTable">
+      <thead>
+        <tr>
+          <th style="width:12%">時間</th>
+          <th style="width:30%">內容</th>
+          <th style="width:16%">負責人</th>
+          <th>備註</th>
+          <th class="op" style="width:34px"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- rows injected by JS -->
+      </tbody>
+    </table>
+    </div>
+    <button class="add-row-btn" data-add="schedule">＋ 新增行程</button>
+  </div>
+
+  <footer>這個網址大家共用同一份資料，任何人編輯都會同步給所有人看到</footer>
+</div>
+
+<script>
+const PEOPLE = ["慈", "翔", "鈞", "裕"];
+const CATEGORIES = ["食材", "飲料", "其他"];
+const PERSON_COLORS = {
+  "慈": { bg: "#fbe3ea", fg: "#c2447a" },
+  "翔": { bg: "#e0eefb", fg: "#2f6fa8" },
+  "鈞": { bg: "#e2f3e6", fg: "#3a8a5a" },
+  "裕": { bg: "#ece3fb", fg: "#7c4fc4" },
+};
+const DEFAULT_TAG_COLOR = { bg: "#f3e3c8", fg: "#b85a1a" };
+function personColor(name){
+  return PERSON_COLORS[name] || DEFAULT_TAG_COLOR;
+}
+const CATEGORY_CLASS = { "食材": "cat-food", "飲料": "cat-drink", "其他": "cat-other" };
+
+const defaultData = {
+  title: "中秋烤肉活動籌備表",
+  meta: ["2026/9/25（五）", "", ""],
+  family: [
+    ["玟吟家", "6", "0", "0", "", ""],
+    ["翔家", "4", "0", "0", "", ""],
+    ["小姑姑家", "5", "0", "0", "", ""],
+    ["二姑丈家", "5", "2", "1", "", ""],
+    ["阿嬤", "1", "0", "0", "", ""],
+    ["阿滴", "1", "0", "0", "", ""],
+  ],
+  shop: [
+    ["食材", "豬肉片", "", [], "pending", ""],
+    ["食材", "雞翅", "", [], "pending", ""],
+    ["食材", "牛肉片", "", [], "pending", ""],
+    ["食材", "香腸", "", [], "pending", ""],
+    ["食材", "花枝 / 蝦", "", [], "pending", ""],
+    ["食材", "玉米", "", [], "pending", ""],
+    ["食材", "香菇", "", [], "pending", ""],
+    ["食材", "甜椒", "", [], "pending", ""],
+    ["食材", "洋蔥", "", [], "pending", ""],
+    ["食材", "生菜", "", [], "pending", ""],
+    ["食材", "烤肉醬 / 沾醬", "", [], "pending", ""],
+    ["飲料", "汽水", "", [], "pending", ""],
+    ["飲料", "啤酒", "", [], "pending", ""],
+    ["飲料", "果汁", "", [], "pending", ""],
+    ["飲料", "礦泉水", "", [], "pending", ""],
+    ["其他", "木炭", "", [], "pending", ""],
+    ["其他", "打火機", "", [], "pending", ""],
+    ["其他", "烤網", "", [], "pending", ""],
+    ["其他", "免洗餐具 / 濕紙巾", "", [], "pending", ""],
+  ],
+  schedule: [
+    ["16:00", "開始架設烤肉架", [], ""],
+    ["17:30", "陸續抵達、開烤", [], ""],
+    ["18:00", "取餐（已訂合菜，共10道）", [], ""],
+    ["19:00", "賞月", [], ""],
+    ["20:30", "收拾整理", [], ""],
+  ],
+};
+
+function migratePersonName(d, oldName, newName){
+  if(!d) return;
+  (d.shop || []).forEach(row => {
+    if(Array.isArray(row[3])){
+      const i = row[3].indexOf(oldName);
+      if(i > -1) row[3][i] = newName;
+    }
+  });
+  (d.schedule || []).forEach(row => {
+    if(Array.isArray(row[2])){
+      const i = row[2].indexOf(oldName);
+      if(i > -1) row[2][i] = newName;
+    }
+  });
+}
+
+const API_URL = "/api/data";
+let data = JSON.parse(JSON.stringify(defaultData));
+let lastSyncedString = JSON.stringify(data);
+let saveTimer = null;
+let saveInFlight = false;
+let pendingResave = false;
+let isEditingNow = false;
+
+function setSyncStatus(state){
+  const el = document.getElementById("syncStatus");
+  if(!el) return;
+  if(state === "saving") el.textContent = "⏳ 同步中…";
+  else if(state === "error") el.textContent = "⚠ 無法連線，稍後重試";
+  else if(state === "loading") el.textContent = "連線中…";
+  else el.textContent = "☁ 已同步";
+}
+
+async function persistToServer(){
+  if(saveInFlight){ pendingResave = true; return; }
+  saveInFlight = true;
+  setSyncStatus("saving");
+  const payload = JSON.stringify(data);
+  try{
+    const res = await fetch(API_URL, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: payload,
+    });
+    if(!res.ok) throw new Error("save failed");
+    lastSyncedString = payload;
+    setSyncStatus("saved");
+  }catch(err){
+    setSyncStatus("error");
+  }finally{
+    saveInFlight = false;
+    if(pendingResave){
+      pendingResave = false;
+      persistToServer();
+    }
+  }
+}
+
+function saveData(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(persistToServer, 500);
+}
+
+async function loadInitialData(){
+  setSyncStatus("loading");
+  try{
+    const res = await fetch(API_URL);
+    const json = await res.json();
+    if(json && json.data){
+      migratePersonName(json.data, "永裕", "裕");
+      data = json.data;
+      lastSyncedString = JSON.stringify(data);
+      setSyncStatus("saved");
+    } else {
+      data = JSON.parse(JSON.stringify(defaultData));
+      await persistToServer();
+    }
+  }catch(err){
+    data = JSON.parse(JSON.stringify(defaultData));
+    setSyncStatus("error");
+  }
+}
+
+async function pollForUpdates(){
+  if(isEditingNow) return;
+  try{
+    const res = await fetch(API_URL);
+    const json = await res.json();
+    if(json && json.data){
+      const remoteString = JSON.stringify(json.data);
+      if(remoteString !== lastSyncedString){
+        migratePersonName(json.data, "永裕", "裕");
+        data = json.data;
+        lastSyncedString = remoteString;
+        renderAll();
+        titleEl.textContent = data.title;
+        metaEls.forEach((el,i) => { el.textContent = data.meta[i] || ""; });
+        setSyncStatus("saved");
+      }
+    }
+  }catch(err){
+    // silent: keep last known good state on transient network errors
+  }
+}
+
+document.addEventListener("focusin", (e) => {
+  if(e.target.matches && e.target.matches('input, select, [contenteditable="true"]')) isEditingNow = true;
+});
+document.addEventListener("focusout", (e) => {
+  if(e.target.matches && e.target.matches('input, select, [contenteditable="true"]')){
+    setTimeout(() => {
+      const active = document.activeElement;
+      isEditingNow = !!(active && active.matches && active.matches('input, select, [contenteditable="true"]'));
+    }, 50);
+  }
+});
+
+const familyBody = document.querySelector("#familyTable tbody");
+const shopBody = document.querySelector("#shopTable tbody");
+const scheduleBody = document.querySelector("#scheduleTable tbody");
+
+function showConfirm(message, onConfirm){
+  const overlay = document.createElement("div");
+  overlay.className = "modal-overlay";
+  const box = document.createElement("div");
+  box.className = "modal-box";
+  const msg = document.createElement("div");
+  msg.className = "modal-msg";
+  msg.textContent = message;
+  const btnRow = document.createElement("div");
+  btnRow.className = "modal-btn-row";
+  const cancelBtn = document.createElement("button");
+  cancelBtn.className = "modal-btn cancel";
+  cancelBtn.textContent = "取消";
+  const okBtn = document.createElement("button");
+  okBtn.className = "modal-btn confirm";
+  okBtn.textContent = "確定刪除";
+  cancelBtn.addEventListener("click", () => overlay.remove());
+  okBtn.addEventListener("click", () => { overlay.remove(); onConfirm(); });
+  overlay.addEventListener("click", (e) => { if(e.target === overlay) overlay.remove(); });
+  btnRow.appendChild(cancelBtn);
+  btnRow.appendChild(okBtn);
+  box.appendChild(msg);
+  box.appendChild(btnRow);
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+}
+
+function makeDelBtn(onClick){
+  const btn = document.createElement("button");
+  btn.className = "del-btn";
+  btn.textContent = "✕";
+  btn.title = "刪除此列";
+  btn.addEventListener("click", () => {
+    showConfirm("確定要刪除這一列嗎？此動作無法復原。", onClick);
+  });
+  return btn;
+}
+
+function makeEditableCell(value, onInput, extraClass){
+  const td = document.createElement("td");
+  if(extraClass) td.className = extraClass;
+  const wrap = document.createElement("div");
+  wrap.className = "cell-wrap";
+  const editable = document.createElement("div");
+  editable.contentEditable = "true";
+  editable.className = "cell-editable";
+  editable.textContent = value || "";
+  editable.addEventListener("input", () => onInput(editable.textContent));
+  editable.addEventListener("blur", () => onInput(editable.textContent));
+  wrap.appendChild(editable);
+  td.appendChild(wrap);
+  return td;
+}
+
+function makeInputCell(value, onInput, extraClass, placeholder){
+  const td = document.createElement("td");
+  if(extraClass) td.className = extraClass;
+  const wrap = document.createElement("div");
+  wrap.className = "cell-wrap";
+  const input = document.createElement("input");
+  input.type = "text";
+  input.className = "cell-input";
+  input.value = value || "";
+  if(placeholder) input.placeholder = placeholder;
+  input.addEventListener("input", () => onInput(input.value));
+  wrap.appendChild(input);
+  td.appendChild(wrap);
+  return td;
+}
+
+function renderFamily(){
+  familyBody.innerHTML = "";
+  data.family.forEach((row, idx) => {
+    const tr = document.createElement("tr");
+    tr.appendChild(makeEditableCell(row[0], v => { data.family[idx][0]=v; saveData(); }));
+    tr.appendChild(makeInputCell(row[1], v => { data.family[idx][1]=v; saveData(); updateTotals(); }, "num"));
+    tr.appendChild(makeInputCell(row[2], v => { data.family[idx][2]=v; saveData(); updateTotals(); }, "num"));
+    tr.appendChild(makeInputCell(row[3], v => { data.family[idx][3]=v; saveData(); updateTotals(); }, "num"));
+    tr.appendChild(makeEditableCell(row[4], v => { data.family[idx][4]=v; saveData(); }));
+    tr.appendChild(makeEditableCell(row[5], v => { data.family[idx][5]=v; saveData(); }));
+    const opTd = document.createElement("td");
+    opTd.className = "op";
+    opTd.appendChild(makeDelBtn(() => {
+      data.family.splice(idx,1);
+      saveData();
+      renderFamily();
+    }));
+    tr.appendChild(opTd);
+    familyBody.appendChild(tr);
+  });
+  updateTotals();
+}
+
+function updateTotals(){
+  let adults=0, kids=0, pets=0;
+  data.family.forEach(r=>{
+    adults += parseInt(r[1])||0;
+    kids += parseInt(r[2])||0;
+    pets += parseInt(r[3])||0;
+  });
+  document.getElementById("sumAdult").textContent = adults;
+  document.getElementById("sumKid").textContent = kids;
+  document.getElementById("sumPet").textContent = pets;
+  document.getElementById("totalPeopleCell").textContent = `共 ${adults+kids} 人`;
+}
+
+function makeSelectCell(value, options, onChange, extraClass){
+  const td = document.createElement("td");
+  const wrap = document.createElement("div");
+  wrap.className = "cell-wrap";
+  const select = document.createElement("select");
+  select.className = "cell-select" + (extraClass ? " "+extraClass : "");
+  options.forEach(([val,label])=>{
+    const opt = document.createElement("option");
+    opt.value = val;
+    opt.textContent = label;
+    if(value === val) opt.selected = true;
+    select.appendChild(opt);
+  });
+  select.addEventListener("change", () => onChange(select.value));
+  wrap.appendChild(select);
+  td.appendChild(wrap);
+  return td;
+}
+
+function makeTagCell(selected, options, onChange){
+  const td = document.createElement("td");
+  td.className = "tag-cell";
+  const wrap = document.createElement("div");
+  wrap.className = "tag-wrap";
+  td.appendChild(wrap);
+
+  let dropdownEl = null;
+
+  function outsideClick(e){
+    if(dropdownEl && !td.contains(e.target)) closeDropdown();
+  }
+  function closeDropdown(){
+    if(dropdownEl){ dropdownEl.remove(); dropdownEl = null; }
+    document.removeEventListener("click", outsideClick);
+  }
+  function openDropdown(){
+    if(dropdownEl){ closeDropdown(); return; }
+    dropdownEl = document.createElement("div");
+    dropdownEl.className = "tag-dropdown";
+    options.forEach(opt => {
+      const item = document.createElement("label");
+      item.className = "tag-option";
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.checked = selected.includes(opt);
+      cb.addEventListener("change", () => {
+        if(cb.checked){
+          if(!selected.includes(opt)) selected.push(opt);
+        } else {
+          const i = selected.indexOf(opt);
+          if(i > -1) selected.splice(i,1);
+        }
+        renderChips();
+        onChange();
+      });
+      const dot = document.createElement("span");
+      dot.className = "tag-dot";
+      dot.style.background = personColor(opt).fg;
+      item.appendChild(cb);
+      item.appendChild(dot);
+      item.appendChild(document.createTextNode(opt));
+      dropdownEl.appendChild(item);
+    });
+    td.appendChild(dropdownEl);
+    document.addEventListener("click", outsideClick);
+  }
+
+  function renderChips(){
+    wrap.innerHTML = "";
+    selected.forEach(val => {
+      const chip = document.createElement("span");
+      chip.className = "tag-chip";
+      const color = personColor(val);
+      chip.style.background = color.bg;
+      chip.style.color = color.fg;
+      chip.appendChild(document.createTextNode(val));
+      const x = document.createElement("span");
+      x.className = "tag-chip-x";
+      x.textContent = "×";
+      x.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const i = selected.indexOf(val);
+        if(i > -1) selected.splice(i,1);
+        renderChips();
+        onChange();
+      });
+      chip.appendChild(x);
+      wrap.appendChild(chip);
+    });
+    if(selected.length < options.length){
+      const addBtn = document.createElement("span");
+      addBtn.className = "tag-add-btn";
+      addBtn.textContent = "＋";
+      addBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openDropdown();
+      });
+      wrap.appendChild(addBtn);
+    }
+  }
+
+  renderChips();
+  return td;
+}
+
+let personFilterSet = new Set();
+
+function rowIsFiltered(row){
+  return personFilterSet.size > 0 && !row.some(p => personFilterSet.has(p));
+}
+
+function renderShop(){
+  shopBody.innerHTML = "";
+  const categoryOpts = CATEGORIES.map(c => [c, c]);
+
+  data.shop.forEach((row, idx) => {
+    const tr = document.createElement("tr");
+    tr.appendChild(makeSelectCell(row[0], categoryOpts, v => {
+      data.shop[idx][0] = v;
+      saveData();
+      renderShop();
+    }, CATEGORY_CLASS[row[0]] || ""));
+    tr.appendChild(makeEditableCell(row[1], v => { data.shop[idx][1]=v; saveData(); }));
+    tr.appendChild(makeInputCell(row[2], v => { data.shop[idx][2]=v; saveData(); }, "num"));
+    tr.appendChild(makeTagCell(row[3], PEOPLE, () => {
+      saveData();
+      tr.style.display = rowIsFiltered(row[3]) ? "none" : "";
+    }));
+
+    const opts = [["pending","未採買"], ["done","已採買"]];
+    tr.appendChild(makeSelectCell(row[4], opts, v => {
+      data.shop[idx][4] = v;
+      saveData();
+      renderShop();
+    }, row[4]==="done" ? "done":"pending"));
+
+    tr.appendChild(makeEditableCell(row[5], v => { data.shop[idx][5]=v; saveData(); }));
+
+    const opTd = document.createElement("td");
+    opTd.className = "op";
+    opTd.appendChild(makeDelBtn(() => {
+      data.shop.splice(idx,1);
+      saveData();
+      renderShop();
+    }));
+    tr.appendChild(opTd);
+
+    if(rowIsFiltered(row[3])){
+      tr.style.display = "none";
+    }
+
+    shopBody.appendChild(tr);
+  });
+}
+
+function renderSchedule(){
+  scheduleBody.innerHTML = "";
+  data.schedule.forEach((row, idx) => {
+    const tr = document.createElement("tr");
+    tr.appendChild(makeEditableCell(row[0], v => { data.schedule[idx][0]=v; saveData(); }));
+    tr.appendChild(makeEditableCell(row[1], v => { data.schedule[idx][1]=v; saveData(); }));
+    tr.appendChild(makeTagCell(row[2], PEOPLE, () => { saveData(); }));
+    tr.appendChild(makeEditableCell(row[3], v => { data.schedule[idx][3]=v; saveData(); }));
+    const opTd = document.createElement("td");
+    opTd.className = "op";
+    opTd.appendChild(makeDelBtn(() => {
+      data.schedule.splice(idx,1);
+      saveData();
+      renderSchedule();
+    }));
+    tr.appendChild(opTd);
+    scheduleBody.appendChild(tr);
+  });
+}
+
+document.querySelectorAll("[data-add]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const type = btn.getAttribute("data-add");
+    if(type === "family"){
+      data.family.push(["", "0", "0", "0", "", ""]);
+      saveData();
+      renderFamily();
+    } else if(type === "shop"){
+      data.shop.push(["", "", "", [], "pending", ""]);
+      saveData();
+      renderShop();
+    } else if(type === "schedule"){
+      data.schedule.push(["", "", [], ""]);
+      saveData();
+      renderSchedule();
+    }
+  });
+});
+
+// title & meta editable
+const titleEl = document.querySelector("h1");
+titleEl.addEventListener("input", () => { data.title = titleEl.textContent; saveData(); });
+
+const metaEls = document.querySelectorAll(".subline .value");
+metaEls.forEach((el, i) => {
+  el.addEventListener("input", () => {
+    if(el.textContent.trim() === "") el.innerHTML = "";
+    data.meta[i] = el.textContent;
+    saveData();
+  });
+});
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+  showConfirm("確定要清空所有內容，恢復成初始範例嗎？這會影響所有人看到的資料，且無法復原。", () => {
+    data = JSON.parse(JSON.stringify(defaultData));
+    persistToServer();
+    personFilterSet.clear();
+    buildPersonFilterButtons();
+    renderAll();
+    titleEl.textContent = data.title;
+    metaEls.forEach((el,i)=> el.textContent = data.meta[i]);
+  });
+});
+
+document.getElementById("printBtn").addEventListener("click", () => {
+  window.print();
+});
+
+function buildPersonFilterButtons(){
+  const container = document.getElementById("personFilterButtons");
+  container.innerHTML = "";
+
+  const allBtn = document.createElement("button");
+  allBtn.type = "button";
+  allBtn.className = "filter-person-btn all-btn";
+  allBtn.textContent = "全部";
+  allBtn.addEventListener("click", () => {
+    personFilterSet.clear();
+    buildPersonFilterButtons();
+    renderShop();
+  });
+  container.appendChild(allBtn);
+
+  PEOPLE.forEach(p => {
+    const color = personColor(p);
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "filter-person-btn";
+    btn.textContent = p;
+    function refreshStyle(){
+      if(personFilterSet.has(p)){
+        btn.style.background = color.fg;
+        btn.style.borderColor = color.fg;
+        btn.style.color = "#fff";
+      } else {
+        btn.style.background = "#fff";
+        btn.style.borderColor = color.fg;
+        btn.style.color = color.fg;
+      }
+    }
+    refreshStyle();
+    btn.addEventListener("click", () => {
+      if(personFilterSet.has(p)) personFilterSet.delete(p);
+      else personFilterSet.add(p);
+      allBtn.classList.toggle("active", personFilterSet.size === 0);
+      refreshStyle();
+      renderShop();
+    });
+    container.appendChild(btn);
+  });
+
+  allBtn.classList.toggle("active", personFilterSet.size === 0);
+}
+
+function renderAll(){
+  renderFamily();
+  renderShop();
+  renderSchedule();
+}
+
+async function init(){
+  await loadInitialData();
+  titleEl.textContent = data.title;
+  metaEls.forEach((el,i) => { el.textContent = data.meta[i]; });
+  buildPersonFilterButtons();
+  renderAll();
+  setInterval(pollForUpdates, 5000);
+}
+init();
+</script>
+</body>
+</html>
